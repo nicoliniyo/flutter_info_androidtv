@@ -35,6 +35,7 @@ class WirelessPage extends StatefulWidget {
 class _WirelessPageState extends State<WirelessPage> {
   final List<InfoItem> _itemsStatus = List.empty(growable: true);
   final NetworkInfo _networkInfo = NetworkInfo();
+  ScrollController _scrollController = ScrollController();
 //  final ConnectivityWidget _connectivityWidget = const ConnectivityWidget();
 
   InternetStatus? _connectionStatus;
@@ -61,9 +62,47 @@ class _WirelessPageState extends State<WirelessPage> {
     super.dispose();
   }
 
+  double calcPos(double pos){
+    return pos == _scrollController.position.minScrollExtent ? _scrollController.position.maxScrollExtent :
+        _scrollController.position.minScrollExtent;
+  }
+
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
+  Widget build(BuildContext context) => RawKeyboardListener(
+    autofocus: true,
+    focusNode: FocusNode(),
+    onKey: (event) {
+      // print('offset!' + _scrollController.offset.toString());
+
+      if(event.data.toString().contains('23')) {
+        // print('enter!' + event.data.keyLabel);
+        _scrollController.animateTo(
+            0.0,
+            duration: Duration(milliseconds: 500),
+            curve: Curves.ease);
+      }
+      if(event.isKeyPressed(LogicalKeyboardKey.arrowDown) ||
+          event.isKeyPressed(LogicalKeyboardKey.arrowLeft)){
+        // print('KEY!');
+        // print('pkay ${event.data.physicalKey}');
+        // print(_scrollController.offset);
+        _scrollController.animateTo(
+            calcPos(_scrollController.offset),
+            duration: Duration(milliseconds: 500),
+            curve: Curves.ease);
+      }
+      if(event.isKeyPressed(LogicalKeyboardKey.arrowUp) ||
+          event.isKeyPressed(LogicalKeyboardKey.arrowRight)){
+        // print('KEY!');
+        // print('pkay ${event.data.physicalKey}');
+        print(_scrollController.offset);
+        _scrollController.animateTo(
+            calcPos(_scrollController.offset),
+            duration: Duration(milliseconds: 500),
+            curve: Curves.ease);
+      }
+    },
+    child: Scaffold(
       appBar: AppBar(
         // ignore: prefer_interpolation_to_compose_strings
         title: Row(
@@ -116,8 +155,9 @@ class _WirelessPageState extends State<WirelessPage> {
           ),
         ),
       ),
-      drawer: const AppDrawer(),
+      // drawer: const AppDrawer(),
       body: SingleChildScrollView(
+          controller: _scrollController,
           child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -131,8 +171,8 @@ class _WirelessPageState extends State<WirelessPage> {
           ItemInfo(_itemsStatus)
         ],
       )),
-    );
-  }
+    )
+  );
 
   Widget _networkStateAndType(InternetStatus internetStatus) {
     Icon icon = const Icon(

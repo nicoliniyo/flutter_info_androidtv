@@ -52,15 +52,15 @@ class _ItemInfo extends State<ItemInfo> {
     }
   }
 
-  void _copyToClipboard(String text, BuildContext context) {
-    Clipboard.setData(ClipboardData(text: text));
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        backgroundColor: ThemeColors.accentColor,
-        content: Text('Copied to clipboard: $text'),
-      ),
-    );
-  }
+  // void _copyToClipboard(String text, BuildContext context) {
+  //   Clipboard.setData(ClipboardData(text: text));
+  //   ScaffoldMessenger.of(context).showSnackBar(
+  //     SnackBar(
+  //       backgroundColor: ThemeColors.accentColor,
+  //       content: Text('Copied to clipboard: $text'),
+  //     ),
+  //   );
+  // }
 
   Widget _createText(InfoItem item, BuildContext context) {
     return Column(
@@ -78,13 +78,13 @@ class _ItemInfo extends State<ItemInfo> {
                   Text(item.data),
                 ],
               ),
-              IconButton(
-                icon: Icon(Icons.copy),
-                color: ThemeColors.primaryDark,
-                onPressed: () {
-                  _copyToClipboard(item.data, context);
-                },
-              ),
+              // IconButton(
+              //   icon: Icon(Icons.copy),
+              //   color: ThemeColors.primaryDark,
+              //   onPressed: () {
+              //     _copyToClipboard(item.data, context);
+              //   },
+              // ),
             ],
           ),
         ),
